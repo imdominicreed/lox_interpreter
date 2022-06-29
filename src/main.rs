@@ -3,6 +3,7 @@ use std::fs;
 use std::io;
 mod token;
 mod scanner;
+mod error;
 
 #[derive(Parser,Default,Debug)]
 struct Args {
@@ -40,13 +41,4 @@ fn run(code: String) {
     for token in tokens.iter() {
         println!("{}", token.to_string());
     }
-}
-
-
-fn error(line: i32, message: String) {
-    report(line, String::from(""), message);
-}
-
-fn report(line: i32, code: String, message: String) {
-    println!("[line {}] Error{}: {}",line, code, message)
 }
