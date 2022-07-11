@@ -1,6 +1,5 @@
-use crate::token::{Token, TokenType, Literal};
+use crate::token::{Token, TokenType, LiteralObject};
 use std::vec::Vec;
-use std::any::Any;
 use std::collections::HashMap;
 use std::array::IntoIter;
 use crate::error;
@@ -25,7 +24,7 @@ impl Scanner {
             ("fun".to_string(), TokenType::Fun), 
             ("for".to_string(), TokenType::For), 
             ("if".to_string(), TokenType::If), 
-            ("nill".to_string(), TokenType::Nill), 
+            ("nil".to_string(), TokenType::Nil), 
             ("print".to_string(), TokenType::Print),
             ("return".to_string(), TokenType::Return), 
             ("super".to_string(), TokenType::Super), 
@@ -126,7 +125,7 @@ impl Scanner {
             self.advance();
         }
         if !self.matching('.'){
-            self.add_token(TokenType::Number, Some(Literal::Number(number)));
+            self.add_token(TokenType::Number, Some(LiteralObject::Number(number)));
             return
         }
         let mut power = 0.1;
@@ -135,7 +134,7 @@ impl Scanner {
             power /= 10.0;
             self.advance();
         }
-        self.add_token(TokenType::Number, Some(Literal::Number(number)));
+        self.add_token(TokenType::Number, Some(LiteralObject::Number(number)));
     }
     fn previous(&self) -> char{
         self.source[self.current-1]
@@ -150,7 +149,7 @@ impl Scanner {
             Some(tt) => token_type = *tt,
             None =>{}
         }
-        self.add_token(token_type, Some(Literal::String(string)))
+        self.add_token(token_type, Some(LiteralObject::String(string)))
     }
     
     fn scan_string(&mut self) {
@@ -162,11 +161,11 @@ impl Scanner {
             error::error(self.line, "Unterminating String :(".to_string());
         }
 
-        self.add_token(TokenType::String, Some(Literal::String(string)));
+        self.add_token(TokenType::String, Some(LiteralObject::String(string)));
         self.advance();
     }
 
-    fn add_token(&mut self, token_type: TokenType, literal: Option<Literal>) {
+    fn add_token(&mut self, token_type: TokenType, literal: Option<LiteralObject>) {
         self.tokens.push(Token::new(
             token_type,
             self.source[self.start..self.current].iter().collect(),

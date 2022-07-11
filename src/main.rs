@@ -4,6 +4,8 @@ use std::io;
 mod token;
 mod scanner;
 mod error;
+mod expressions;
+mod parser;
 
 #[derive(Parser,Default,Debug)]
 struct Args {

@@ -1,6 +1,6 @@
 use std::any::Any;
 
-#[derive(Copy, Clone,Debug)]
+#[derive(Copy, Clone,Debug, PartialEq)]
 pub enum TokenType {
     // Single-character tokens.
     LeftParen,
@@ -38,7 +38,7 @@ pub enum TokenType {
     Fun,
     For,
     If,
-    Nill,
+    Nil,
     Or,
     Print,
     Return,
@@ -51,19 +51,17 @@ pub enum TokenType {
     Eof,
 }
 #[derive(Debug)]
-pub enum Literal {
+pub enum LiteralObject {
     Number(f64),
     String(String)
 }
 
 
 
-
-
 pub struct Token {
-    token_type: TokenType,
+    pub token_type: TokenType,
     lexeme: String,
-    literal: Option<Literal>,
+    pub literal: Option<LiteralObject>,
     line: usize,
 }
 
@@ -71,7 +69,7 @@ impl Token {
     pub fn new(
         token_type: TokenType,
         lexeme: String,
-        literal: Option<Literal>,
+        literal: Option<LiteralObject>,
         line: usize,
     ) -> Token {
         Token {
